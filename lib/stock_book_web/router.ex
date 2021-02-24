@@ -16,7 +16,13 @@ defmodule StockBookWeb.Router do
   scope "/", StockBookWeb do
     pipe_through :browser
 
+    # Routes for loggin in, creating, or deleting a session
+    get "/login", SessionController, :new
+    post "/login", SessionController, :create
+    delete "/logout", SessionController, :delete
+
     get "/", PageController, :index
+    resources "/users", UserController, only: [:show, :new, :create]
   end
 
   # Other scopes may use custom stacks.

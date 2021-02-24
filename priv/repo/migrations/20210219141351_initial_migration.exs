@@ -16,7 +16,7 @@ defmodule StockBook.Repo.Migrations.InitialMigration do
       timestamps()
     end
 
-    create_unique_index(:articles, :user_id)
+    create unique_index(:articles, :user_id)
 
     create table("comments") do
       add :content, :string
@@ -25,8 +25,8 @@ defmodule StockBook.Repo.Migrations.InitialMigration do
       timestamps()
     end
 
-    create_unique_index(:comments, :user_id)
-    create_unique_index(:comments, :article_id)
+    create unique_index(:comments, :user_id)
+    create unique_index(:comments, :article_id)
 
     create table("likes") do
       add :user_id, references(:users)
@@ -34,8 +34,8 @@ defmodule StockBook.Repo.Migrations.InitialMigration do
       timestamps()
     end
 
-    create_unique_index(:likes, :user_id)
-    create_unique_index(:likes, :article_id)
+    create unique_index(:likes, :user_id)
+    create unique_index(:likes, :article_id)
   end
 
 end
