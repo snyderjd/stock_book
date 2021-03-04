@@ -1,31 +1,25 @@
 defmodule StockBookWeb.UserController do
   use StockBookWeb, :controller
-  alias StockBook.User
-  plug :prevent_unauthorized_access when action in [:show]
 
-  @repo StockBook.Repo
+  alias StockBook.User.UserService
+  plug :prevent_unauthorized_access when action in [:show]
 
   # Gets a user by their id and renders the show template
   def show(conn, %{"id" => id}) do
-    user = @repo.get!(User, id)
+    user = UserService.get_user(id)
     render(conn, "show.html", user: user)
   end
 
   # Creates a user changeset and passes it to the template for a new user
   def new(conn, _params) do
-    user = User.changeset_with_password(%User{})
+    user = UserService.new_user()
     render(conn, "new.html", user: user)
   end
 
   # Takes in user params and creates a new user. If successful, redirects
   # to the new user's detail page. If not, re-renders the new form with errors
   def create(conn, %{"user" => user_params}) do
-    new_user =
-      %User{}
-      |> User.changeset_with_password(user_params)
-      |> @repo.insert()
-
-    case new_user do
+    case UserService.insert_user(user_params) do
       {:ok, user} -> redirect(conn, to: Routes.user_path(conn, :show, user))
       {:error, user} -> render(conn, "new.html", user: user)
     end
