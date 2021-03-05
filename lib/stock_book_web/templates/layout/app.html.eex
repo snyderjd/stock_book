@@ -13,17 +13,19 @@
       <nav class="navbar__container">
         <h1 class="navbar__header">StockBook</h1>
         <ul class="navbar__list">
+          <li><a href="/login">NavLink 1</a></li>
+          <li><a href="/logout">NavLink 2</a></li>
+          <li><a href="/users/new">NavLink 3</a></li>
+        </ul>
+        <ul class="navbar__user">
           <%= if @current_user do %>
-            Logged in as <%= link @current_user.email, to: Routes.user_path(@conn, :show, @current_user) %>
+            <%= link @current_user.email, to: Routes.user_path(@conn, :show, @current_user) %>
             |
             <%= link "Log out", to: Routes.session_path(@conn, :delete), method: :delete %>
           <% else %>
-            <%= link "Login", to: Rtoues.session_path(@conn, :new) %>
+            <%= link "Login", to: Routes.session_path(@conn, :new) %>
+            <%= link "Register", to: Routes.user_path(@conn, :new) %>
           <% end %>
-
-          <li><a href="/login">Login</a></li>
-          <li><a href="/logout">Logout</a></li>
-          <li><a href="/users/new">Register</a></li>
         </ul>
       </nav>
     </header>
