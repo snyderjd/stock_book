@@ -9,8 +9,6 @@ defmodule StockBook.User.UserService do
 
   @repo StockBook.Repo
 
-  # Set of public interface functions that allow you to easily create, read, update, delete, etc.
-
   def get_user(id), do: @repo.get!(User, id)
 
   def new_user, do: User.changeset_with_password(%User{})

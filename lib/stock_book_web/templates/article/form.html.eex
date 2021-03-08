@@ -1,0 +1,9 @@
+<%= form_for @article, @action, fn field -> %>
+  <% if @item.action do %>
+    <div class="alert alert-danger">
+      Unfortunately, there are errors in your submission. Please correct them below.
+    </div>
+  <% end %>
+
+
+<% end %>
