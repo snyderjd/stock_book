@@ -24,7 +24,7 @@ defmodule StockBookWeb.Router do
 
     get "/", PageController, :index
     resources "/users", UserController, only: [:show, :new, :create]
-    resources "/articles", ArticleController, only: [:new, :create]
+    resources "/articles", ArticleController, only: [:new, :create, :index, :show]
   end
 
   # Other scopes may use custom stacks.

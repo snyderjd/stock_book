@@ -11,7 +11,9 @@ defmodule StockBook.Article.ArticleService do
   end
 
   def get_article(id) do
-    @repo.get!(Article, id)
+    Article
+    |> @repo.get!(id)
+    |> @repo.preload(:user)
   end
 
   def get_article_by(attrs) do

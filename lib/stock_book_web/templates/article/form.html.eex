@@ -1,9 +1,20 @@
+
 <%= form_for @article, @action, fn field -> %>
-  <% if @item.action do %>
+  <% if @article.action do %>
     <div class="alert alert-danger">
-      Unfortunately, there are errors in your submission. Please correct them below.
+      Unfortunately, there are errors in your submission. Please correct them below
     </div>
   <% end %>
 
+  <div class="textEditor__container">
+    <%= textarea field, :content, id: "content", name: "content" %>
+  </div>
 
+  <div>
+    <%= submit "Submit" %>
+  </div>
 <% end %>
+
+<script>
+  CKEDITOR.replace('content');
+</script>

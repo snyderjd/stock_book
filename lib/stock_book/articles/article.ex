@@ -12,7 +12,8 @@ defmodule StockBook.Article do
 
   def changeset(article, params \\ %{}) do
     article
-    |> cast(params, [:content])
-    |> validate_required(:content)
+    |> cast(params, [:content, :user_id])
+    |> validate_required([:content, :user_id])
+    |> assoc_constraint(:user)
   end
 end

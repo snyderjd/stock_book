@@ -7,13 +7,14 @@
     <title>StockBook</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+    <script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
   </head>
   <body>
     <header>
       <nav class="navbar__container">
         <h1 class="navbar__header">StockBook</h1>
         <ul class="navbar__list">
-          <li><a href="/login">NavLink 1</a></li>
+          <li><a href="/articles">Articles</a></li>
           <li><a href="/logout">NavLink 2</a></li>
           <li><a href="/users/new">NavLink 3</a></li>
         </ul>
