@@ -1,0 +1,4 @@
+<div>
+  <p>Author: <%= @article.user.first_name %></p>
+  <%= raw(@article.content) %>
+</div>

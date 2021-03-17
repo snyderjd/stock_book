@@ -9,9 +9,9 @@ defmodule StockBook.User do
     field :password, :string, virtual: true
     field :hashed_password, :string
     timestamps()
-    has_many :articles, Auction.Article
-    has_many :comments, Auction.Comment
-    has_many :likes, Auction.Like
+    has_many :articles, StockBook.Article
+    has_many :comments, StockBook.Comment
+    has_many :likes, StockBook.Like
   end
 
   def changeset(user, params \\ %{}) do

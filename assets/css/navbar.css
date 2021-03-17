@@ -1,0 +1,32 @@
+ /* Navbar styling  */
+
+ body {
+  margin: 0px;
+}
+
+.navbar__container {
+  display: flex;
+  justify-content: space-between;
+  background: lightblue;
+  align-items: center;
+}
+
+.navbar__list {
+  display: flex;
+  justify-content: space-evenly;
+  width: 40%;
+  align-items: center;
+}
+
+.navbar__header {
+  vertical-align: middle;
+  padding: 0;
+  margin: 0;
+}
+
+.navbar__user {
+  display: flex;
+  justify-content: space-evenly;
+  width: 25%;
+  align-items: center;
+}
