@@ -1,4 +1,6 @@
 <div>
-  <p>Author: <%= @article.user.first_name %></p>
+  <p>Author: <%= get_full_name(@article.user) %> |
+    <%= formatted_date(@article.inserted_at) %>
+  </p>
   <%= raw(@article.content) %>
 </div>

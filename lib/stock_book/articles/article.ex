@@ -14,6 +14,6 @@ defmodule StockBook.Article do
     article
     |> cast(params, [:content, :user_id])
     |> validate_required([:content, :user_id])
-    |> assoc_constraint(:user)
+    # |> assoc_constraint(:user)
   end
 end
