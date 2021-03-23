@@ -8,6 +8,7 @@ defmodule StockBook.Article.ArticleService do
 
   def list_articles do
     @repo.all(Article)
+    |> @repo.preload(:user)
   end
 
   def get_article(id) do

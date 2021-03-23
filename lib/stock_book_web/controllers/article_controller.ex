@@ -32,6 +32,12 @@ defmodule StockBookWeb.ArticleController do
     end
   end
 
+  # GET to /articles/edit, renders form to edit an existing article
+  def edit(conn, %{"id" => id}) do
+    article = ArticleService.edit_article(id)
+    render(conn, "edit.html", article: article)
+  end
+
   # Throw an error if there if the current_user is nil
   defp require_logged_in_user(%{assigns: %{current_user: nil}} = conn, _opts) do
     conn

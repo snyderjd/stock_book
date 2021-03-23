@@ -4,3 +4,9 @@
   </p>
   <%= raw(@article.content) %>
 </div>
+
+<%= if @current_user.id == @article.user.id do %>
+  <div>
+    <%= button("Edit Article", to: Routes.article_path(@conn, :edit, @article)) %>
+  </div>
+<% end %>

@@ -3,6 +3,7 @@ defmodule StockBook.Article do
   import Ecto.Changeset
 
   schema "articles" do
+    field :title, :string
     field :content, :string
     timestamps()
     belongs_to :user, StockBook.User
@@ -12,8 +13,8 @@ defmodule StockBook.Article do
 
   def changeset(article, params \\ %{}) do
     article
-    |> cast(params, [:content, :user_id])
-    |> validate_required([:content, :user_id])
-    # |> assoc_constraint(:user)
+    |> cast(params, [:title, :content, :user_id])
+    |> validate_required([:title, :content, :user_id])
+    |> assoc_constraint(:user)
   end
 end

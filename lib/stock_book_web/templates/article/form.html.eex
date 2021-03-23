@@ -6,8 +6,16 @@
     </div>
   <% end %>
 
+  <div>
+    <%= label field, :title %>
+    <%= text_input field, :title %>
+    <%= error_tag field, :title %>
+  </div>
+
   <div class="textEditor__container">
+    <%= label field, :content %>
     <%= textarea field, :content, id: "content", name: "content" %>
+    <%= error_tag field, :content %>
   </div>
 
   <div>
