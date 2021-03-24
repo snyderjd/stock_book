@@ -23,10 +23,10 @@ defmodule StockBookWeb.ArticleController do
   end
 
   # POST to /articles, saves a new article to the database
-  def create(conn, %{"content" => content}) do
+  def create(conn, %{"content" => content, "title" => title}) do
     user_id = conn.assigns.current_user.id
 
-    case ArticleService.insert_article(%{content: content, user_id: user_id}) do
+    case ArticleService.insert_article(%{content: content, user_id: user_id, title: title}) do
       {:ok, article} -> redirect(conn, to: Routes.article_path(conn, :show, article))
       {:error, article} -> render(conn, "new.html", article: article)
     end

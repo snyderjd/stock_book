@@ -2,6 +2,7 @@
   <p>Author: <%= get_full_name(@article.user) %> |
     <%= formatted_date(@article.inserted_at) %>
   </p>
+  <h1><%= @article.title %></h1>
   <%= raw(@article.content) %>
 </div>
 
