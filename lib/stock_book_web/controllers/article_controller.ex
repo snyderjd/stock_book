@@ -11,6 +11,7 @@ defmodule StockBookWeb.ArticleController do
     render(conn, "index.html", articles: articles)
   end
 
+  @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do
     article = ArticleService.get_article(id)
     render(conn, "show.html", article: article)
@@ -23,14 +24,31 @@ defmodule StockBookWeb.ArticleController do
   end
 
   # POST to /articles, saves a new article to the database
-  def create(conn, %{"content" => content}) do
+  def create(conn, %{"content" => content, "title" => title}) do
     user_id = conn.assigns.current_user.id
 
-    case ArticleService.insert_article(%{content: content, user_id: user_id}) do
+    case ArticleService.insert_article(%{content: content, user_id: user_id, title: title}) do
       {:ok, article} -> redirect(conn, to: Routes.article_path(conn, :show, article))
       {:error, article} -> render(conn, "new.html", article: article)
     end
   end
+
+  # GET to /articles/edit, renders form to edit an existing article
+  def edit(conn, %{"id" => id}) do
+    author_id = ArticleService.get_article(id).user.id
+    article = ArticleService.edit_article(id)
+
+    verify_author(conn, author_id)
+    render(conn, "edit.html", article: article)
+  end
+
+  def update(conn, %{"content" => content, "title" => title}) do
+
+  end
+
+  # -----------------------------
+  # ---------- PRIVATE ----------
+  # -----------------------------
 
   # Throw an error if there if the current_user is nil
   defp require_logged_in_user(%{assigns: %{current_user: nil}} = conn, _opts) do
@@ -42,5 +60,12 @@ defmodule StockBookWeb.ArticleController do
 
   defp require_logged_in_user(conn, _opts), do: conn
 
-
+  defp verify_author(conn, author_id) do
+    if conn.assigns.current_user.id != author_id do
+      conn
+      |> put_flash(:error, "You do not have permission to edit this article.")
+      |> redirect(to: Routes.article_path(conn, :index))
+      |> halt()
+    end
+  end
 end

@@ -1,4 +1,11 @@
 <div>
-  <p>Author: <%= @article.user.first_name %></p>
+  <p>Author: <%= get_full_name(@article.user) %> |
+    <%= formatted_date(@article.inserted_at) %>
+  </p>
+  <h1><%= @article.title %></h1>
   <%= raw(@article.content) %>
 </div>
+
+<%= if @current_user.id == @article.user.id  do %>
+  <%= button("Edit", to: Routes.article_path(@conn, :edit, @article), method: :get) %>
+<% end %>
