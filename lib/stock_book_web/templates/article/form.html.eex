@@ -11,9 +11,11 @@
   <%= text_input field, :title, id: "title", name: "title" %>
   <%= error_tag field, :title %>
 
-  <%= label field, :content %>
-  <%= textarea field, :content, id: "content", name: "content" %>
-  <%= error_tag field, :content %>
+  <div class="textEditor__container">
+    <%= label field, :content %>
+    <%= textarea field, :content, id: "content", name: "content" %>
+    <%= error_tag field, :content %>
+  </div>
 
   <div>
     <%= submit "Submit" %>
