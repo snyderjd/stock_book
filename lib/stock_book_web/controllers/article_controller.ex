@@ -42,8 +42,13 @@ defmodule StockBookWeb.ArticleController do
     render(conn, "edit.html", article: article)
   end
 
-  def update(conn, %{"content" => content, "title" => title}) do
-
+  def update(conn, article_params) do
+    IO.inspect(article_params["id"], label: "article_params.id")
+    article = ArticleService.get_article(article_params["id"])
+    case ArticleService.update_article(article, article_params) do
+      {:ok, article} -> redirect(conn, to: Routes.article_path(conn, :show, article))
+      {:error, article} -> render(conn, "edit.html", article: article)
+    end
   end
 
   # -----------------------------
