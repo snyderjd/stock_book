@@ -51,6 +51,14 @@ defmodule StockBookWeb.ArticleController do
     end
   end
 
+  # DELETE to /articles/:id
+  def delete(conn, %{"id" => id}) do
+    case ArticleService.delete_article(id) do
+      {:ok, _article} -> redirect(conn, to: Routes.article_path(conn, :index))
+      {:error, article} -> render(conn, "show.html", article: article)
+    end
+  end
+
   # -----------------------------
   # ---------- PRIVATE ----------
   # -----------------------------

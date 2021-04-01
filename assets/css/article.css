@@ -5,3 +5,9 @@
 .textEditor__container {
   margin: 10px;
 }
+
+.article-buttons__container {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}

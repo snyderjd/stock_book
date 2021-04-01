@@ -7,5 +7,9 @@
 </div>
 
 <%= if @current_user.id == @article.user.id  do %>
-  <%= button("Edit", to: Routes.article_path(@conn, :edit, @article), method: :get) %>
+  <div class="article-buttons__container">
+      <%= button("Edit", to: Routes.article_path(@conn, :edit, @article), method: :get, class: "article-detail__button") %>
+      <%= button("Delete", to: Routes.article_path(@conn, :delete, @article), method: :delete, data: [confirm: "Are you sure you want to delete this article?"], class: "article-detail__button") %>
+  </div>
+
 <% end %>

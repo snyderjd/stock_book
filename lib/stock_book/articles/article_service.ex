@@ -40,4 +40,10 @@ defmodule StockBook.Article.ArticleService do
     |> @repo.update()
   end
 
+  def delete_article(id) do
+    get_article(id)
+    |> Article.changeset()
+    |> @repo.delete()
+  end
+
 end
