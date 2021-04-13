@@ -6,7 +6,7 @@
   <%= for article <- @articles do %>
     <li>
       <strong>
-        <%= link(article_index_display(article), to: Routes.article_path(@conn, :show, article))%>
+        <%= link(article_index_display(article), to: Routes.article_path(@conn, :show, article)) %>
       </strong>
     </li>
   <% end %>
