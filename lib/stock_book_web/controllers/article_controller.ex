@@ -27,15 +27,25 @@ defmodule StockBookWeb.ArticleController do
     user_id = conn.assigns.current_user.id
 
     case ArticleService.insert_article(%{content: content, user_id: user_id, title: title}) do
-      {:ok, article} -> redirect(conn, to: Routes.article_path(conn, :show, article))
-      {:error, article} -> render(conn, "new.html", article: article)
+      {:ok, article} ->
+        conn
+        |> put_flash(:info, "Article created successfully")
+        |> redirect(to: Routes.article_path(conn, :show, article))
+
+      {:error, article} ->
+        render(conn, "new.html", article: article)
     end
   end
 
   # GET to /articles/edit, renders form to edit an existing article
   def edit(conn, %{"id" => id}) do
+    IO.inspect(id, label: "edit_id")
     author_id = ArticleService.get_article(id).user.id
     article = ArticleService.edit_article(id)
+
+    IO.inspect(conn, label: "edit_conn")
+    IO.inspect(author_id, label: "edit_author_id")
+    IO.inspect(article, label: "edit_article")
 
     verify_author(conn, author_id)
     render(conn, "edit.html", article: article)
