@@ -37,5 +37,4 @@ defmodule StockBook.Repo.Migrations.InitialMigration do
     create unique_index(:likes, :user_id)
     create unique_index(:likes, :article_id)
   end
-
 end

@@ -15,5 +15,4 @@ defmodule StockBook.Comment do
     |> validate_required(:content)
     |> validate_length(:content, min: 8)
   end
-
 end

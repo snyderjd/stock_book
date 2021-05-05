@@ -4,8 +4,7 @@ defmodule StockBookWeb.ArticleController do
 
   plug :require_logged_in_user
 
-
-  #Returns the list of articles for GET to /articles
+  # Returns the list of articles for GET to /articles
   def index(conn, _params) do
     articles = ArticleService.list_articles()
     render(conn, "index.html", articles: articles)
@@ -28,8 +27,13 @@ defmodule StockBookWeb.ArticleController do
     user_id = conn.assigns.current_user.id
 
     case ArticleService.insert_article(%{content: content, user_id: user_id, title: title}) do
-      {:ok, article} -> redirect(conn, to: Routes.article_path(conn, :show, article))
-      {:error, article} -> render(conn, "new.html", article: article)
+      {:ok, article} ->
+        conn
+        |> put_flash(:info, "Article created successfully")
+        |> redirect(to: Routes.article_path(conn, :show, article))
+
+      {:error, article} ->
+        render(conn, "new.html", article: article)
     end
   end
 
@@ -42,8 +46,21 @@ defmodule StockBookWeb.ArticleController do
     render(conn, "edit.html", article: article)
   end
 
-  def update(conn, %{"content" => content, "title" => title}) do
+  def update(conn, article_params) do
+    article = ArticleService.get_article(article_params["id"])
 
+    case ArticleService.update_article(article, article_params) do
+      {:ok, article} -> redirect(conn, to: Routes.article_path(conn, :show, article))
+      {:error, article} -> render(conn, "edit.html", article: article)
+    end
+  end
+
+  # DELETE to /articles/:id
+  def delete(conn, %{"id" => id}) do
+    case ArticleService.delete_article(id) do
+      {:ok, _article} -> redirect(conn, to: Routes.article_path(conn, :index))
+      {:error, article} -> render(conn, "show.html", article: article)
+    end
   end
 
   # -----------------------------
@@ -58,7 +75,9 @@ defmodule StockBookWeb.ArticleController do
     |> halt()
   end
 
-  defp require_logged_in_user(conn, _opts), do: conn
+  defp require_logged_in_user(conn, _opts) do
+    conn
+  end
 
   defp verify_author(conn, author_id) do
     if conn.assigns.current_user.id != author_id do
