@@ -42,5 +42,4 @@ defmodule StockBookWeb.UserController do
       conn
     end
   end
-
 end

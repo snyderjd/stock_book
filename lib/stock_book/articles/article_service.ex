@@ -45,5 +45,4 @@ defmodule StockBook.Article.ArticleService do
     |> Article.changeset()
     |> @repo.delete()
   end
-
 end

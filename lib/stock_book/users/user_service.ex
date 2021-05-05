@@ -21,11 +21,10 @@ defmodule StockBook.User.UserService do
 
   def get_user_by_email_and_password(email, password) do
     with user when not is_nil(user) <- @repo.get_by(User, %{email: email}),
-      true <- Password.verify_with_hash(password, user.hashed_password) do
-        user
+         true <- Password.verify_with_hash(password, user.hashed_password) do
+      user
     else
       _ -> Password.dummy_verify()
     end
   end
-
 end

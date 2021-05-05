@@ -10,5 +10,4 @@ defmodule StockBook.Password do
   end
 
   def dummy_verify, do: no_user_verify()
-
 end

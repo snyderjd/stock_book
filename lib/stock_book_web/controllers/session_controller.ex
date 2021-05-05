@@ -16,6 +16,7 @@ defmodule StockBookWeb.SessionController do
         |> put_session(:user_id, user.id)
         |> put_flash(:info, "Successfully logged in")
         |> redirect(to: Routes.user_path(conn, :show, user))
+
       _ ->
         conn
         |> put_flash(:error, "That username and password combination cannot be found")
@@ -30,5 +31,4 @@ defmodule StockBookWeb.SessionController do
     |> configure_session(drop: true)
     |> redirect(to: Routes.page_path(conn, :index))
   end
-
 end

@@ -4,7 +4,7 @@ defmodule StockBookWeb.ArticleController do
 
   plug :require_logged_in_user
 
-  #Returns the list of articles for GET to /articles
+  # Returns the list of articles for GET to /articles
   def index(conn, _params) do
     articles = ArticleService.list_articles()
     render(conn, "index.html", articles: articles)
@@ -39,13 +39,8 @@ defmodule StockBookWeb.ArticleController do
 
   # GET to /articles/edit, renders form to edit an existing article
   def edit(conn, %{"id" => id}) do
-    IO.inspect(id, label: "edit_id")
     author_id = ArticleService.get_article(id).user.id
     article = ArticleService.edit_article(id)
-
-    IO.inspect(conn, label: "edit_conn")
-    IO.inspect(author_id, label: "edit_author_id")
-    IO.inspect(article, label: "edit_article")
 
     verify_author(conn, author_id)
     render(conn, "edit.html", article: article)
@@ -53,6 +48,7 @@ defmodule StockBookWeb.ArticleController do
 
   def update(conn, article_params) do
     article = ArticleService.get_article(article_params["id"])
+
     case ArticleService.update_article(article, article_params) do
       {:ok, article} -> redirect(conn, to: Routes.article_path(conn, :show, article))
       {:error, article} -> render(conn, "edit.html", article: article)

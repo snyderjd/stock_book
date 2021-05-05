@@ -1,6 +1,7 @@
 defmodule StockBook.Factory do
   # with Ecto
   use ExMachina.Ecto, repo: StockBook.Repo
+  alias StockBook.Password
 
   def user_factory do
     first_name = Faker.Person.first_name()
@@ -10,7 +11,8 @@ defmodule StockBook.Factory do
       first_name: first_name,
       last_name: last_name,
       email: "#{first_name}_#{last_name}@test.com",
-      password: "password1"
+      password: "password1",
+      hashed_password: Password.hash("password1")
     }
   end
 
@@ -21,5 +23,4 @@ defmodule StockBook.Factory do
       user: build(:user)
     }
   end
-
 end

@@ -12,6 +12,8 @@ defmodule StockBookWeb.ArticleView do
   end
 
   def article_index_display(article) do
-    "#{article.title} | #{article.user.first_name} #{article.user.last_name} | #{article.inserted_at}"
+    "#{article.title} | #{article.user.first_name} #{article.user.last_name} | #{
+      article.inserted_at
+    }"
   end
 end
