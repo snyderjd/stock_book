@@ -13,3 +13,28 @@
   </div>
 
 <% end %>
+
+<div class="comments__container">
+  <h2>Comments</h2>
+
+  <%= if @current_user do %>
+    <h3>Add a comment!</h3>
+
+    <%= form_for @comment, Routes.article_comment_path(@conn, :create, @article), fn field -> %>
+      <%= if @comment.action do %>
+        <div class="alert alert-danger">
+          There are errors in your submission. Please correct them below.
+        </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= label field, :content, "Content", class: "control-label" %>
+        <%= error_tag field, :content %>
+        <%= textarea field, :content %>
+      </div>
+
+      <%= submit "Submit", class: "btn btn-primary" %>
+    <% end %>
+  <% end %>
+
+</div>
