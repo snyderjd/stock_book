@@ -4,9 +4,16 @@ defmodule StockBook.Comment.CommentService do
   that allow you to easily create, read, update, etc.
   """
 
-  alias StockBook.{Comment}
+  alias StockBook.{Comment, Repo}
 
   @spec new_comment :: Ecto.Changeset.t()
   def new_comment, do: Comment.changeset(%Comment{})
+
+  @spec insert_comment(map()) :: tuple()
+  def insert_comment(params) do
+    %Comment{}
+    |> Comment.changeset(params)
+    |> Repo.insert()
+  end
 
 end

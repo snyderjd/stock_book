@@ -3,25 +3,24 @@ defmodule StockBook.Article.ArticleService do
   Provides a set of public interface functions for articles that allow you to
   easily create, read, update, etc.
   """
-  alias StockBook.{Article}
-  @repo StockBook.Repo
+  alias StockBook.{Article, Comment, Repo}
 
   @spec list_articles :: nil | [%{optional(atom) => any}] | %{optional(atom) => any}
   def list_articles do
-    @repo.all(Article)
-    |> @repo.preload(:user)
+    Repo.all(Article)
+    |> Repo.preload(:user)
   end
 
   @spec get_article(any) :: nil | [%{optional(atom) => any}] | %{optional(atom) => any}
   def get_article(id) do
     Article
-    |> @repo.get!(id)
-    |> @repo.preload(:user)
+    |> Repo.get!(id)
+    |> Repo.preload(:user)
   end
 
   @spec get_article_by(any) :: any
   def get_article_by(attrs) do
-    @repo.get_by(Article, attrs)
+    Repo.get_by(Article, attrs)
   end
 
   @spec new_article :: Ecto.Changeset.t()
@@ -31,7 +30,7 @@ defmodule StockBook.Article.ArticleService do
   def insert_article(attrs) do
     %Article{}
     |> Article.changeset(attrs)
-    |> @repo.insert()
+    |> Repo.insert()
   end
 
   @spec edit_article(any) :: Ecto.Changeset.t()
@@ -44,13 +43,13 @@ defmodule StockBook.Article.ArticleService do
   def update_article(%Article{} = article, updates) do
     article
     |> Article.changeset(updates)
-    |> @repo.update()
+    |> Repo.update()
   end
 
   @spec delete_article(any) :: any
   def delete_article(id) do
     get_article(id)
     |> Article.changeset()
-    |> @repo.delete()
+    |> Repo.delete()
   end
 end
