@@ -15,5 +15,4 @@ defmodule StockBook.Comment.CommentService do
     |> Comment.changeset(params)
     |> Repo.insert()
   end
-
 end

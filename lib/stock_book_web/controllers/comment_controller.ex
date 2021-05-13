@@ -14,7 +14,11 @@ defmodule StockBookWeb.CommentController do
     IO.inspect(user_id, label: "user_id")
     IO.inspect(article_id, label: "article_id")
 
-    case CommentService.insert_comment(%{content: content, user_id: user_id, article_id: article_id}) do
+    case CommentService.insert_comment(%{
+           content: content,
+           user_id: user_id,
+           article_id: article_id
+         }) do
       {:ok, comment} ->
         IO.inspect(comment, label: "comment")
         redirect(conn, to: Routes.article_path(conn, :show, article_id))
@@ -33,5 +37,4 @@ defmodule StockBookWeb.CommentController do
   end
 
   defp require_logged_in_user(conn, _opts), do: conn
-
 end

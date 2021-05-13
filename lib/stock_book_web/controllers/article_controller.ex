@@ -14,6 +14,7 @@ defmodule StockBookWeb.ArticleController do
   @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do
     article = ArticleService.get_article(id)
+    IO.inspect(article, label: "article")
     comment = CommentService.new_comment()
     render(conn, "show.html", article: article, comment: comment)
   end

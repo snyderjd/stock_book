@@ -1,0 +1,8 @@
+<div class="comment">
+  <div class="comment__info">
+    <%= get_full_name(@comment.user) %> | <%= formatted_date(@comment.inserted_at) %>
+  </div>
+  <div class="comment__content">
+    <%= @comment.content %>
+  </div>
+</div>

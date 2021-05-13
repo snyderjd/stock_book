@@ -15,7 +15,7 @@ defmodule StockBook.Article.ArticleService do
   def get_article(id) do
     Article
     |> Repo.get!(id)
-    |> Repo.preload(:user)
+    |> Repo.preload([:user, [comments: [:user]]])
   end
 
   @spec get_article_by(any) :: any
