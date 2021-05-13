@@ -11,8 +11,8 @@ defmodule StockBook.Comment do
 
   def changeset(comment, params \\ %{}) do
     comment
-    |> cast(params, [:content])
-    |> validate_required(:content)
+    |> cast(params, [:content, :user_id, :article_id])
+    |> validate_required([:content, :user_id, :article_id])
     |> validate_length(:content, min: 8)
   end
 end

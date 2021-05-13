@@ -1,6 +1,7 @@
 defmodule StockBookWeb.ArticleController do
   use StockBookWeb, :controller
   alias StockBook.Article.ArticleService
+  alias StockBook.Comment.CommentService
 
   plug :require_logged_in_user
 
@@ -13,7 +14,9 @@ defmodule StockBookWeb.ArticleController do
   @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do
     article = ArticleService.get_article(id)
-    render(conn, "show.html", article: article)
+    IO.inspect(article, label: "article")
+    comment = CommentService.new_comment()
+    render(conn, "show.html", article: article, comment: comment)
   end
 
   # Render form to create a new article for GET to /articles/new
