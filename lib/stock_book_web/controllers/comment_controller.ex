@@ -10,23 +10,27 @@ defmodule StockBookWeb.CommentController do
   def create(conn, %{"comment" => %{"content" => content}, "article_id" => article_id}) do
     user_id = conn.assigns.current_user.id
 
-    IO.inspect(content, label: "content")
-    IO.inspect(user_id, label: "user_id")
-    IO.inspect(article_id, label: "article_id")
-
     case CommentService.insert_comment(%{
            content: content,
            user_id: user_id,
            article_id: article_id
          }) do
-      {:ok, comment} ->
-        IO.inspect(comment, label: "comment")
+      {:ok, _comment} ->
         redirect(conn, to: Routes.article_path(conn, :show, article_id))
 
       {:error, comment} ->
         article = ArticleService.get_article(article_id)
         render(conn, ArticleView, "show.html", article: article, comment: comment)
     end
+  end
+
+  def edit(conn, %{"article_id" => article_id, "id" => id}) do
+    article = ArticleService.get_article(article_id)
+    comment = CommentService.edit_comment(id)
+
+    conn
+    |> put_view(StockBookWeb.ArticleView)
+    |> render(:show, article: article, comment: comment)
   end
 
   defp require_logged_in_user(%{assigns: %{current_user: nil}} = conn, _opts) do

@@ -27,7 +27,7 @@ defmodule StockBookWeb.Router do
 
     resources "/articles", ArticleController,
       only: [:new, :create, :index, :show, :edit, :update, :delete] do
-      resources "/comments", CommentController, only: [:create]
+      resources "/comments", CommentController, only: [:create, :edit]
     end
   end
 

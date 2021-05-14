@@ -38,7 +38,7 @@
   <% end %>
 
   <div id="comments__container--comments">
-    <%= render_many(@article.comments, StockBookWeb.CommentView, "comment.html") %>
+    <%= render_many(@article.comments, StockBookWeb.CommentView, "comment.html", current_user_id: @current_user.id, conn: @conn) %>
   </div>
 
 </div>
