@@ -28,4 +28,14 @@ defmodule StockBook.Comment.CommentService do
     |> Comment.changeset(params)
     |> Repo.insert()
   end
+
+  @spec update_comment(integer(), map()) :: tuple()
+  def update_comment(id, updates) do
+    comment = get_comment(id)
+
+    comment
+    |> Comment.changeset(updates)
+    |> Repo.update()
+  end
+
 end

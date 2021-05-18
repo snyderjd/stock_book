@@ -8,6 +8,7 @@
 
   <%= if @current_user_id == @comment.user.id do %>
     <div class="comment__buttons">
+      <% IO.inspect(@comment, label: "comment") %>
       <%= link("Edit", to: Routes.article_comment_path(@conn, :edit, @comment.article_id, @comment.id), method: :get) %>
     </div>
   <% end %>

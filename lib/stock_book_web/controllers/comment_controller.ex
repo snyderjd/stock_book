@@ -7,6 +7,7 @@ defmodule StockBookWeb.CommentController do
 
   plug :require_logged_in_user
 
+  @spec create(Plug.Conn.t(), map) :: Plug.Conn.t()
   def create(conn, %{"comment" => %{"content" => content}, "article_id" => article_id}) do
     user_id = conn.assigns.current_user.id
 
@@ -24,14 +25,23 @@ defmodule StockBookWeb.CommentController do
     end
   end
 
+  @spec edit(Plug.Conn.t(), map) :: Plug.Conn.t()
   def edit(conn, %{"article_id" => article_id, "id" => id}) do
     article = ArticleService.get_article(article_id)
     comment = CommentService.edit_comment(id)
 
     conn
     |> put_view(StockBookWeb.ArticleView)
-    |> render(:show, article: article, comment: comment)
+    |> render(:show, article: article, comment: comment, updating_comment: true, comment_id: id)
   end
+
+  @spec update(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def update(conn, params = %{"id" => id}) do
+    IO.inspect(conn, label: "conn")
+    IO.inspect(params, label: "params")
+  end
+
+  ########## PRIVATE ##########
 
   defp require_logged_in_user(%{assigns: %{current_user: nil}} = conn, _opts) do
     conn

@@ -16,4 +16,5 @@ defmodule StockBookWeb.ArticleView do
       article.inserted_at
     }"
   end
+
 end
