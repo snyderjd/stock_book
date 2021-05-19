@@ -21,24 +21,59 @@ defmodule StockBookWeb.CommentController do
 
       {:error, comment} ->
         article = ArticleService.get_article(article_id)
-        render(conn, ArticleView, "show.html", article: article, comment: comment)
+
+        render(conn, ArticleView, "show.html",
+          article: article,
+          comment: comment,
+          updating_comment: false
+        )
     end
   end
 
   @spec edit(Plug.Conn.t(), map) :: Plug.Conn.t()
   def edit(conn, %{"article_id" => article_id, "id" => id}) do
     article = ArticleService.get_article(article_id)
-    comment = CommentService.edit_comment(id)
+    comment_changeset = CommentService.edit_comment(id)
+    comment = CommentService.get_comment(id)
+
+    verify_author(conn, comment.user_id)
 
     conn
     |> put_view(StockBookWeb.ArticleView)
-    |> render(:show, article: article, comment: comment, updating_comment: true, comment_id: id)
+    |> render(:show,
+      article: article,
+      comment: comment_changeset,
+      updating_comment: true,
+      comment_id: id
+    )
   end
 
   @spec update(Plug.Conn.t(), map) :: Plug.Conn.t()
   def update(conn, params = %{"id" => id}) do
-    IO.inspect(conn, label: "conn")
-    IO.inspect(params, label: "params")
+    comment = CommentService.get_comment(id)
+    article = ArticleService.get_article(comment.article_id)
+    new_comment = CommentService.new_comment()
+
+    verify_author(conn, comment.user_id)
+
+    case CommentService.update_comment(id, params["comment"]) do
+      {:ok, _comment} ->
+        conn
+        |> put_view(StockBookWeb.ArticleView)
+        |> redirect(
+          to: Routes.article_path(conn, :show, article),
+          article: article,
+          comment: new_comment,
+          updating_comment: false
+        )
+
+      {:error, comment} ->
+        render(conn, ArticleView, "show.html",
+          article: article,
+          comment: comment,
+          updating_comment: true
+        )
+    end
   end
 
   ########## PRIVATE ##########
@@ -51,4 +86,13 @@ defmodule StockBookWeb.CommentController do
   end
 
   defp require_logged_in_user(conn, _opts), do: conn
+
+  defp verify_author(conn, author_id) do
+    if conn.assigns.current_user.id != author_id do
+      conn
+      |> put_flash(:error, "You do not have permission to edit this comment.")
+      |> redirect(to: Routes.article_path(conn, :index))
+      |> halt()
+    end
+  end
 end

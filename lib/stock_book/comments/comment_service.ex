@@ -37,5 +37,4 @@ defmodule StockBook.Comment.CommentService do
     |> Comment.changeset(updates)
     |> Repo.update()
   end
-
 end
