@@ -37,4 +37,10 @@ defmodule StockBook.Comment.CommentService do
     |> Comment.changeset(updates)
     |> Repo.update()
   end
+
+  @spec delete_comment(any) :: tuple()
+  def delete_comment(id) do
+    comment = get_comment(id)
+    Repo.delete(comment)
+  end
 end

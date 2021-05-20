@@ -76,6 +76,34 @@ defmodule StockBookWeb.CommentController do
     end
   end
 
+  @spec delete(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def delete(conn, _params = %{"id" => id}) do
+    comment = CommentService.get_comment(id)
+    article = ArticleService.get_article(comment.article_id)
+    new_comment = CommentService.new_comment()
+
+    verify_author(conn, comment.user_id)
+
+    case CommentService.delete_comment(id) do
+      {:ok, _comment} ->
+        conn
+        |> put_view(StockBookWeb.ArticleView)
+        |> put_flash(:info, "Comment deleted successfully")
+        |> redirect(
+          to: Routes.article_path(conn, :show, article),
+          article: article,
+          comment: new_comment,
+          updating_comment: false
+        )
+
+      {:error, _comment} ->
+        conn
+        |> put_view(StockBookWeb.ArticleView)
+        |> render("show.html", article: article, comment: new_comment, updating_comment: false)
+    end
+
+  end
+
   ########## PRIVATE ##########
 
   defp require_logged_in_user(%{assigns: %{current_user: nil}} = conn, _opts) do
