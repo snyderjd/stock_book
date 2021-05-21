@@ -6,6 +6,7 @@ defmodule StockBookWeb.ArticleController do
   plug :require_logged_in_user
 
   # Returns the list of articles for GET to /articles
+  @spec index(Plug.Conn.t(), any) :: Plug.Conn.t()
   def index(conn, _params) do
     articles = ArticleService.list_articles()
     render(conn, "index.html", articles: articles)
@@ -14,18 +15,19 @@ defmodule StockBookWeb.ArticleController do
   @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do
     article = ArticleService.get_article(id)
-    IO.inspect(article, label: "article")
     comment = CommentService.new_comment()
-    render(conn, "show.html", article: article, comment: comment)
+    render(conn, "show.html", article: article, comment: comment, updating_comment: false)
   end
 
   # Render form to create a new article for GET to /articles/new
+  @spec new(Plug.Conn.t(), any) :: Plug.Conn.t()
   def new(conn, _params) do
     article = ArticleService.new_article()
     render(conn, "new.html", article: article)
   end
 
   # POST to /articles, saves a new article to the database
+  @spec create(Plug.Conn.t(), map) :: Plug.Conn.t()
   def create(conn, %{"content" => content, "title" => title}) do
     user_id = conn.assigns.current_user.id
 
@@ -41,6 +43,7 @@ defmodule StockBookWeb.ArticleController do
   end
 
   # GET to /articles/edit, renders form to edit an existing article
+  @spec edit(Plug.Conn.t(), map) :: Plug.Conn.t()
   def edit(conn, %{"id" => id}) do
     author_id = ArticleService.get_article(id).user.id
     article = ArticleService.edit_article(id)
@@ -49,6 +52,7 @@ defmodule StockBookWeb.ArticleController do
     render(conn, "edit.html", article: article)
   end
 
+  @spec update(Plug.Conn.t(), any) :: Plug.Conn.t()
   def update(conn, article_params) do
     article = ArticleService.get_article(article_params["id"])
 
@@ -59,6 +63,7 @@ defmodule StockBookWeb.ArticleController do
   end
 
   # DELETE to /articles/:id
+  @spec delete(Plug.Conn.t(), map) :: Plug.Conn.t()
   def delete(conn, %{"id" => id}) do
     case ArticleService.delete_article(id) do
       {:ok, _article} -> redirect(conn, to: Routes.article_path(conn, :index))

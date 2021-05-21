@@ -20,25 +20,51 @@
   <%= if @current_user do %>
     <h3>Add a comment!</h3>
 
-    <%= form_for @comment, Routes.article_comment_path(@conn, :create, @article), fn field -> %>
-      <%= if @comment.action do %>
-        <div class="alert alert-danger">
-          There are errors in your submission. Please correct them below.
+    <%= if @conn.assigns.updating_comment do %>
+
+      <%# Form to update comment %>
+      <%= form_for @comment, Routes.article_comment_path(@conn, :update, @article, @comment_id), fn field -> %>
+        <%= if @comment.action do %>
+          <div>
+            There are errors in your submission. Please correct them below.
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= label field, :content, "Content", class: "control-label" %>
+          <%= error_tag field, :content %>
+          <%= textarea field, :content %>
         </div>
+
+        <%= submit "Submit", class: "btn btn-primary" %>
       <% end %>
 
-      <div class="form-group">
-        <%= label field, :content, "Content", class: "control-label" %>
-        <%= error_tag field, :content %>
-        <%= textarea field, :content %>
-      </div>
+    <% else %>
 
-      <%= submit "Submit", class: "btn btn-primary" %>
+      <%# Form to create comment %>
+      <%= form_for @comment, Routes.article_comment_path(@conn, :create, @article), fn field -> %>
+        <%= if @comment.action do %>
+          <div class="alert alert-danger">
+            There are errors in your submission. Please correct them below.
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= label field, :content, "Content", class: "control-label" %>
+          <%= error_tag field, :content %>
+          <%= textarea field, :content %>
+        </div>
+
+        <%= submit "Submit", class: "btn btn-primary" %>
+      <% end %>
+
     <% end %>
+
+
   <% end %>
 
   <div id="comments__container--comments">
-    <%= render_many(@article.comments, StockBookWeb.CommentView, "comment.html") %>
+    <%= render_many(@article.comments, StockBookWeb.CommentView, "comment.html", current_user_id: @current_user.id, conn: @conn) %>
   </div>
 
 </div>
