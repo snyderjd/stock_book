@@ -4,10 +4,8 @@ defmodule StockBookWeb.ArticleControllerTest do
 
   use StockBookWeb.ConnCase
 
-  import Plug.Conn
   import Phoenix.ConnTest
   import StockBook.Factory
-  alias StockBook.Article
 
   @create_attrs %{content: "article content goes here", title: "new article title"}
   @invalid_attrs %{content: "", title: ""}
@@ -29,7 +27,7 @@ defmodule StockBookWeb.ArticleControllerTest do
       %{conn: conn, articles: [article1, article2, article3]}
     end
 
-    test "lists all the articles", %{conn: conn, articles: articles} do
+    test "lists all the articles", %{conn: conn} do
       new_conn = get(conn, Routes.article_path(conn, :index))
       assert html_response(new_conn, 200) =~ "Articles"
     end
@@ -38,7 +36,9 @@ defmodule StockBookWeb.ArticleControllerTest do
   describe "show" do
     setup %{conn: conn} do
       # Insert a test article and user
-      article = insert(:article)
+      comment1 = build(:comment_without_article)
+      comment2 = build(:comment_without_article)
+      article = insert(:article, comments: [comment1, comment2])
       user = insert(:user)
 
       # Update the connection to authenticate a user
@@ -46,12 +46,14 @@ defmodule StockBookWeb.ArticleControllerTest do
         conn
         |> post("/login", %{"user" => %{"email" => user.email, "password" => user.password}})
 
-      %{conn: conn, article: article}
+      %{conn: conn, article: article, comments: [comment1, comment2]}
     end
 
-    test "gets an article by its id", %{conn: conn, article: article} do
-      new_conn = get(conn, Routes.article_path(conn, :show, article.id))
-      assert html_response(new_conn, 200) =~ article.title
+    test "gets an article by its id", %{conn: conn, article: article, comments: [comment1, comment2]} do
+      conn = get(conn, Routes.article_path(conn, :show, article.id))
+      assert html_response(conn, 200) =~ article.title
+      assert html_response(conn, 200) =~ comment1.content
+      assert html_response(conn, 200) =~ comment2.content
     end
   end
 

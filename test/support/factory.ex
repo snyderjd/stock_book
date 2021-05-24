@@ -23,4 +23,19 @@ defmodule StockBook.Factory do
       user: build(:user)
     }
   end
+
+  def comment_without_article_factory do
+    %StockBook.Comment{
+      content: Faker.Lorem.sentence(),
+      user: build(:user)
+    }
+  end
+
+  def comment_factory do
+    %StockBook.Comment{
+      content: Faker.Lorem.sentence(),
+      user: build(:user),
+      article: build(:article)
+    }
+  end
 end
