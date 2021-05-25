@@ -46,42 +46,104 @@ defmodule StockBookWeb.CommentControllerTest do
 
       conn = post(conn, Routes.article_comment_path(conn, :create, article), invalid_params)
 
-      IO.inspect(html_response(conn, 200), label: "response")
-
-      conn = get(conn, Routes.article_path(conn, :show, article.id))
       assert html_response(conn, 200) =~ article.title
-      assert response(conn, 200) =~ "There are errors in your submission. Please correct them below."
+
+      assert response(conn, 200) =~
+               "There are errors in your submission. Please correct them below."
     end
-
-    # assert %{id: id} = redirected_params(conn)
-    # assert redirected_to(conn) == Routes.article_path(conn, :show, id)
-
-    # conn = get(conn, Routes.article_path(conn, :show, id))
-    # assert html_response(conn, 200) =~ "new article title"
   end
 
+  describe "edit and update" do
+    setup %{conn: conn} do
+      article = insert(:article)
+      user = insert(:user)
+
+      # Authenticate the user and add to assigns as current user
+      conn =
+        conn
+        |> post("/login", %{"user" => %{"email" => user.email, "password" => user.password}})
+        |> Map.put(:assigns, %{current_user: user})
+
+      comment = insert(:comment, article: article, user: user)
+
+      {:ok, conn: conn, article: article, comment: comment}
+    end
+
+    test "User can make edit request for form to edit a comment", %{
+      conn: conn,
+      article: article,
+      comment: comment
+    } do
+      conn = get(conn, Routes.article_comment_path(conn, :edit, article, comment))
+      assert html_response(conn, 200) =~ article.title
+    end
+
+    test "User can update comment with valid params", %{
+      conn: conn,
+      article: article,
+      comment: comment
+    } do
+      params = %{
+        "article_id" => article.id,
+        "comment" => %{"content" => "Lets update a comment"},
+        "id" => comment.id
+      }
+
+      conn = put(conn, Routes.article_comment_path(conn, :update, article, comment), params)
+
+      assert %{id: id} = redirected_params(conn)
+      assert redirected_to(conn) == Routes.article_path(conn, :show, id)
+
+      conn = get(conn, Routes.article_path(conn, :show, id))
+      assert html_response(conn, 200) =~ article.title
+      assert html_response(conn, 200) =~ "Lets update a comment"
+    end
+
+    test "User cannot update a comment with invalid params", %{
+      conn: conn,
+      article: article,
+      comment: comment
+    } do
+      params = %{
+        "article_id" => article.id,
+        "comment" => %{"content" => ""},
+        "id" => comment.id
+      }
+
+      conn = put(conn, Routes.article_comment_path(conn, :update, article, comment), params)
+
+      assert html_response(conn, 200) =~ article.title
+
+      assert html_response(conn, 200) =~
+               "There are errors in your submission. Please correct them below."
+    end
+  end
+
+  describe "delete" do
+    setup %{conn: conn} do
+      article = insert(:article)
+      user = insert(:user)
+
+      # Authenticate the user and add to assigns as current user
+      conn =
+        conn
+        |> post("/login", %{"user" => %{"email" => user.email, "password" => user.password}})
+        |> Map.put(:assigns, %{current_user: user})
+
+      comment = insert(:comment, article: article, user: user)
+
+      {:ok, conn: conn, article: article, comment: comment}
+    end
+
+    test "User can delete their comment", %{conn: conn, article: article, comment: comment} do
+      conn = delete(conn, Routes.article_comment_path(conn, :delete, article, comment))
+
+      assert %{id: id} = redirected_params(conn)
+      assert redirected_to(conn) == Routes.article_path(conn, :show, id)
+
+      conn = get(conn, Routes.article_path(conn, :show, id))
+      assert html_response(conn, 200) =~ article.title
+      refute html_response(conn, 200) =~ comment.content
+    end
+  end
 end
-
-# describe "show" do
-#   setup %{conn: conn} do
-#     # Insert a test article and user
-#     comment1 = build(:comment_without_article)
-#     comment2 = build(:comment_without_article)
-#     article = insert(:article, comments: [comment1, comment2])
-#     user = insert(:user)
-
-#     # Update the connection to authenticate a user
-#     conn =
-#       conn
-#       |> post("/login", %{"user" => %{"email" => user.email, "password" => user.password}})
-
-#     %{conn: conn, article: article, comments: [comment1, comment2]}
-#   end
-
-#   test "gets an article by its id", %{conn: conn, article: article, comments: [comment1, comment2]} do
-#     conn = get(conn, Routes.article_path(conn, :show, article.id))
-#     assert html_response(conn, 200) =~ article.title
-#     assert html_response(conn, 200) =~ comment1.content
-#     assert html_response(conn, 200) =~ comment2.content
-#   end
-# end

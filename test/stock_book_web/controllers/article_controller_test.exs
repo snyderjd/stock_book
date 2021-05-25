@@ -49,7 +49,11 @@ defmodule StockBookWeb.ArticleControllerTest do
       %{conn: conn, article: article, comments: [comment1, comment2]}
     end
 
-    test "gets an article by its id", %{conn: conn, article: article, comments: [comment1, comment2]} do
+    test "gets an article by its id", %{
+      conn: conn,
+      article: article,
+      comments: [comment1, comment2]
+    } do
       conn = get(conn, Routes.article_path(conn, :show, article.id))
       assert html_response(conn, 200) =~ article.title
       assert html_response(conn, 200) =~ comment1.content

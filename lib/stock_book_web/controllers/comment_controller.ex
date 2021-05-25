@@ -71,7 +71,8 @@ defmodule StockBookWeb.CommentController do
         render(conn, ArticleView, "show.html",
           article: article,
           comment: comment,
-          updating_comment: true
+          updating_comment: true,
+          comment_id: id
         )
     end
   end
@@ -101,7 +102,6 @@ defmodule StockBookWeb.CommentController do
         |> put_view(StockBookWeb.ArticleView)
         |> render("show.html", article: article, comment: new_comment, updating_comment: false)
     end
-
   end
 
   ########## PRIVATE ##########
